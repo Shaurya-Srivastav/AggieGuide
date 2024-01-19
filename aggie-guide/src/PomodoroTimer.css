@@ -1,0 +1,171 @@
+.pomodoro-timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.time-display {
+    font-size: 6rem;
+    color: #0056b3;
+    margin: 20px 0;
+    width: 100%;
+    text-align: center;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #e0e0e0;
+    height: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.progress {
+    height: 100%;
+    background-color: #4caf50;
+    width: 0;
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.timer-controls button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    outline: none; /* Remove button focus outline */
+  }
+  
+  .timer-controls button:hover {
+    background: linear-gradient(45deg, #0056b3, #004c9b);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .timer-controls button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+
+.settings {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.settings div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settings label {
+    font-size: 1rem;
+    color: #333;
+}
+
+.settings button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.settings button:hover {
+    background-color: #0056b3;
+}
+
+.task-input {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.task-input input {
+    flex-grow: 1;
+    padding: 10px;
+}
+
+.task-input button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.task-input button:hover {
+    background-color: #3e8e41;
+}
+
+.task-list {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.task-card {
+    background-color: #e7f3ff;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.task-done {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(45deg, #28a745, #218838);
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    outline: none; /* Remove button focus outline */
+  }
+  
+  .task-done:hover {
+    background: linear-gradient(45deg, #218838, #1e7e34);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px); /* Slight lift */
+  }
+  
+  .task-done:active {
+    transform: translateY(1px); /* Push effect on click */
+  }
+  
+
+@keyframes task-completed {
+    0% { background-color: #e7f3ff; }
+    100% { background-color: #90ee90; }
+}
+
+.task-completed {
+    animation: task-completed 1s forwards;
+}

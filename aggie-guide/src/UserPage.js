@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './UserPage.css'; 
+import PomodoroTimer from './PomodoroTimer';
 import { Link } from 'react-router-dom';
 
 const UserPage = () => {
@@ -14,9 +15,58 @@ const UserPage = () => {
   // Define a simple Card component (you can expand upon this)
   const CourseCard = () => (
     <div className="course-card">
-      {/* Card content goes here */}
+      <h1>Course - ECS 50</h1>
     </div>
   );
+
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  // Mock function to simulate file upload progress
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      return;
+    }
+
+    // This is where you would typically use a file upload service
+    // For this example, we'll simulate progress with a timeout
+    const updateProgress = (value) => {
+      setUploadProgress(value);
+      if (value === 100) {
+        // Reset progress after a delay when it reaches 100%
+        setTimeout(() => setUploadProgress(0), 1500);
+      }
+    };
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      if (progress <= 100) {
+        updateProgress(progress);
+      } else {
+        clearInterval(interval);
+      }
+    }, 200);
+  };
+
+
+  const [homeworks, setHomeworks] = useState([]);
+  const [showAddHomeworkPopup, setShowAddHomeworkPopup] = useState(false);
+  const [newHomework, setNewHomework] = useState('');
+
+  const handleAddHomework = () => {
+    if (newHomework) {
+      setHomeworks([...homeworks, newHomework]);
+      setNewHomework('');
+      setShowAddHomeworkPopup(false);
+    }
+  };
+
+  const removeHomework = (index) => {
+    const updatedHomeworks = [...homeworks];
+    updatedHomeworks.splice(index, 1);
+    setHomeworks(updatedHomeworks);
+  };
 
   return (
     <div className="user-page">
@@ -40,20 +90,25 @@ const UserPage = () => {
             <section className="upload-section">
                 <h2>Upload Materials</h2>
                 <div className="upload-area">
-                    <label htmlFor="file-upload" className="custom-file-upload">
+                <label htmlFor="file-upload" className="custom-file-upload">
                     <i className="fa fa-cloud-upload"></i> Upload File
-                    </label>
-                    <input id="file-upload" type="file"/>
-                    
-                    <select name="courses" id="courses" className="course-select">
-                    <option value="">Select Course...</option>
-                    {/* Populate with courses */}
+                </label>
+                <input 
+                    id="file-upload" 
+                    type="file" 
+                    onChange={handleFileUpload}
+                />
+                <select name="courses" id="courses" className="course-select">
                     <option value="course1">Course 1</option>
                     <option value="course2">Course 2</option>
-                    {/* ... more options ... */}
-                    </select>
+                </select>
                 </div>
-            </section>
+                {uploadProgress > 0 && (
+                <div className="upload-progress-bar">
+                    <div className="upload-progress" style={{ width: `${uploadProgress}%` }}></div>
+                </div>
+                )}
+          </section>
 
             <section className="courses-section">
             <h2>Courses</h2>
@@ -68,11 +123,42 @@ const UserPage = () => {
                 {/* Add more CourseCards as needed */}
             </div>
             </section>
+
+            <section className="homework-section">
+              <h2>Homework</h2>
+              <button className="add-homework-btn" onClick={() => setShowAddHomeworkPopup(true)}>
+                Add Homework
+              </button>
+              {homeworks.map((hw, index) => (
+                <div key={index} className="homework-item">
+                  <span>{hw}</span>
+                  <button className="homework-done-btn" onClick={() => removeHomework(index)}>
+                    Done
+                  </button>
+                </div>
+              ))}
+            </section>
+            {showAddHomeworkPopup && (
+              <div className="popup">
+                <div className="popup-inner">
+                  <input
+                    type="text"
+                    placeholder="Enter homework..."
+                    value={newHomework}
+                    onChange={(e) => setNewHomework(e.target.value)}
+                  />
+                  <button onClick={handleAddHomework}>Submit</button>
+                  <button onClick={() => setShowAddHomeworkPopup(false)}>Cancel</button>
+                </div>
+              </div>
+            )}
+
+            
           </div>
         )}
         {activePage === 'pomodoro' && (
-          <div>
-            <h1>Pomodoro</h1>
+          <div className="page-section">
+            <PomodoroTimer />
           </div>
         )}
         {activePage === 'notes' && (

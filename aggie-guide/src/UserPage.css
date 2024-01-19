@@ -97,6 +97,24 @@
   #file-upload {
     display: none; /* The actual file input remains hidden */
   }
+
+  .upload-progress-bar {
+    width: 58%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  
+  .upload-progress {
+    height: 5px;
+    background-color: #4caf50;
+    width: 0;
+    border-radius: 5px;
+    transition: width 0.5s ease;
+    margin: 0 auto;
+  }
+  
   
   .course-select {
     padding: 10px 20px;
@@ -166,6 +184,101 @@
     background-color: #004c9b;
   }
   
+  .homework-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  
+  .add-homework-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px; /* Added spacing */
+  }
+  
+  .homework-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+  }
+  
+  .homework-done-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  }
+  
+  .homework-done-btn:hover {
+    background-color: #218838;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+  }
+  
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .popup-inner {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    width: 40%;
+    max-width: 500px;
+    height: auto;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  
+  .popup-inner input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 100%;
+  }
+  
+  .popup-inner button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .popup-inner button:hover {
+    background-color: #e0e0e0;
+  }
+
+
+
+
+
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .sidebar {
