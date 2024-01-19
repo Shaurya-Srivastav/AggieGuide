@@ -48,41 +48,70 @@
     padding: 20px;
     overflow-y: auto;
   }
-  
+
   .upload-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background-color: white;
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
   }
   
   .upload-section h2 {
     font-size: 1.4rem;
     color: #0056b3;
+    margin: 0 20px 0 0; /* Added margin to the right */
   }
   
   .upload-area {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-color: #eee;
-    border-radius: 10px;
-    margin-top: 20px;
-  }
-
-  .upload-icon {
-    background-image: url('https://icons8.com/icon/60019/upload'); /* Replace with the path to your upload icon */
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    width: 60px;
-    height: 60px;
-    cursor: pointer;
+    justify-content: flex-start; /* Aligns children to the start of the container */
+    flex-grow: 1;
   }
   
+  .custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-file-upload i {
+    margin-right: 10px; /* Space between icon and text */
+    /* If using a font icon library like FontAwesome */
+  }
+  
+  .custom-file-upload:hover {
+    background-color: #e8e8e8;
+  }
+  
+  #file-upload {
+    display: none; /* The actual file input remains hidden */
+  }
+  
+  .course-select {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 20px; /* Added margin to the left */
+    background-color: white;
+    transition: border-color 0.3s ease;
+  }
+  
+  .course-select:hover,
+  .course-select:focus {
+    border-color: #0056b3;
+  }
+
   .courses-section {
     background-color: white;
     padding: 20px;
@@ -163,5 +192,27 @@
       width: 120px;
       height: 120px;
     }
+    
   }
+   
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .upload-section {
+      flex-direction: column;
+      align-items: stretch;
+    }
   
+    .upload-area {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .custom-file-upload {
+      margin-bottom: 10px;
+      justify-content: center;
+    }
+  
+    .course-select {
+      width: 100%; /* Ensure dropdown stretches to full width */
+    }
+  }

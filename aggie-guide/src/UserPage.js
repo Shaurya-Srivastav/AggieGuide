@@ -37,46 +37,59 @@ const UserPage = () => {
       <main className="content">
         {activePage === 'home' && (
           <div>
-            {/* Home page content */}
+            <section className="upload-section">
+                <h2>Upload Materials</h2>
+                <div className="upload-area">
+                    <label htmlFor="file-upload" className="custom-file-upload">
+                    <i className="fa fa-cloud-upload"></i> Upload File
+                    </label>
+                    <input id="file-upload" type="file"/>
+                    
+                    <select name="courses" id="courses" className="course-select">
+                    <option value="">Select Course...</option>
+                    {/* Populate with courses */}
+                    <option value="course1">Course 1</option>
+                    <option value="course2">Course 2</option>
+                    {/* ... more options ... */}
+                    </select>
+                </div>
+            </section>
+
+            <section className="courses-section">
+            <h2>Courses</h2>
+            <div className="course-cards-container">
+                <CourseCard />
+                <CourseCard />
+                <CourseCard />
+                <CourseCard />
+                <CourseCard />
+                <CourseCard />
+                <CourseCard />
+                {/* Add more CourseCards as needed */}
+            </div>
+            </section>
           </div>
         )}
         {activePage === 'pomodoro' && (
           <div>
-            {/* Pomodoro page content */}
+            <h1>Pomodoro</h1>
           </div>
         )}
         {activePage === 'notes' && (
           <div>
-            {/* Notes page content */}
+            <h1>Notes</h1>
           </div>
         )}
         {activePage === 'flashcards' && (
           <div>
-            {/* Flashcards page content */}
+            <h1>flashcards</h1>
           </div>
         )}
         {activePage === 'practice' && (
           <div>
-            {/* Practice Tests page content */}
+             <h1>Practice Test</h1>
           </div>
         )}
-
-        <section className="upload-section">
-          <h2>Upload Materials</h2>
-          <div className="upload-area">
-            <div className="upload-icon"></div>
-          </div>
-        </section>
-
-        <section className="courses-section">
-          <h2>Courses</h2>
-          <div className="course-cards-container">
-            <CourseCard />
-            <CourseCard />
-            <CourseCard />
-            {/* Add more CourseCards as needed */}
-          </div>
-        </section>
       </main>
     </div>
   );
