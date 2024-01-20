@@ -1,6 +1,6 @@
 // src/HomePage.js
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import './HomePage.css'; // Make sure to import the updated CSS
 import { useAuth0 } from "@auth0/auth0-react";
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './UserPage.css'; 
 import PomodoroTimer from './PomodoroTimer';
 import { Link } from 'react-router-dom';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const UserPage = () => {
 
@@ -122,6 +123,8 @@ const UserPage = () => {
     setHomeworks(updatedHomeworks);
   };
 
+  const { logout } = useAuth0();
+
   return (
     <div className="user-page">
       <aside className="sidebar">
@@ -135,6 +138,7 @@ const UserPage = () => {
             <li onClick={() => navigateTo('notes')}>Notes</li>
             <li onClick={() => navigateTo('flashcards')}>Flashcards</li>
             <li onClick={() => navigateTo('practice')}>Practice Tests</li>
+            <li className="logout" onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Logout</li>
           </ul>
         </nav>
       </aside>

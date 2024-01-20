@@ -16,7 +16,7 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<HomePage />} />
-          <Route path="/auth" element={<AuthPage />} />
+          {/* <Route path="/auth" element={<AuthPage />} /> */}
           <Route path="/user" element={<UserPage />} />
           {/* Add more routes as needed */}
         </Routes>
