@@ -3,13 +3,15 @@ import './UserPage.css';
 import PomodoroTimer from './PomodoroTimer';
 import { Link } from 'react-router-dom';
 import { useAuth0 } from "@auth0/auth0-react";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 const UserPage = () => {
 
 
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showCourseDetailsPopup, setShowCourseDetailsPopup] = useState(false);
-  const [showPracticeTest, setShowPracticeTest] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
 
   // State to manage the active "page"
   const [activePage, setActivePage] = useState('home');
@@ -156,10 +158,13 @@ const UserPage = () => {
                     type="file" 
                     onChange={handleFileUpload}
                 />
+                {courses.length > 0 && (
                 <select name="courses" id="courses" className="course-select">
-                    <option value="course1">Course 1</option>
-                    <option value="course2">Course 2</option>
+                      {courses.map((course, index) => (
+                        <option key={index} value={course.name}>{course.name}</option>
+                      ))}
                 </select>
+                )}
                 </div>
                 {uploadProgress > 0 && (
                 <div className="upload-progress-bar">
@@ -210,6 +215,7 @@ const UserPage = () => {
               {homeworks.map((hw, index) => (
                 <div key={index} className="homework-item">
                   <span>{hw}</span>
+                  <p>Due: {startDate.toLocaleString()}</p>
                   <button className="homework-done-btn" onClick={() => removeHomework(index)}>
                     Done
                   </button>
@@ -225,6 +231,16 @@ const UserPage = () => {
                     value={newHomework}
                     onChange={(e) => setNewHomework(e.target.value)}
                   />
+                  <span>
+                    Due Date: 
+                    <DatePicker 
+                      className="date-picker"
+                      selected={startDate} 
+                      onChange={date => setStartDate(date)} 
+                      showTimeSelect
+                      dateFormat="Pp"
+                    />  
+                  </span>
                   <button onClick={handleAddHomework}>Submit</button>
                   <button onClick={() => setShowAddHomeworkPopup(false)}>Cancel</button>
                 </div>
@@ -262,6 +278,7 @@ const UserPage = () => {
         )}
         {activePage === 'practice' && (
           <div>
+              <h1>Practice Tests</h1>
               <div className="course-cards-container">
                 {courses.map((course, index) => (
                   <CourseCard key={index} course={course} index={index} />
@@ -269,7 +286,7 @@ const UserPage = () => {
                 {showCourseDetailsPopup && selectedCourse && (
                 <div className="course-details-popup">
                   <div className="popup-content">
-                    <button className="close-btn" onClick={() => setShowPracticeTest(false)}>×</button>
+                    <button className="close-btn" onClick={() => setShowCourseDetailsPopup(false)}>×</button>
                     <h2>{selectedCourse.name}</h2>
                     <p>Practice test questions will be below</p>
                     {/* Additional course details here */}

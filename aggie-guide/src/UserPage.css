@@ -4,6 +4,10 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.date-picker {
+  margin-left: 10px;
+}
+
 .sidebar {
   background-color: #0056b3;
   color: white;
