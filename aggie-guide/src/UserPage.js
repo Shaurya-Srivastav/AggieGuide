@@ -4,6 +4,12 @@ import PomodoroTimer from './PomodoroTimer';
 import { Link } from 'react-router-dom';
 
 const UserPage = () => {
+
+
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [showCourseDetailsPopup, setShowCourseDetailsPopup] = useState(false);
+
+
   // State to manage the active "page"
   const [activePage, setActivePage] = useState('home');
 
@@ -12,13 +18,61 @@ const UserPage = () => {
     setActivePage(page);
   };
 
-  // Define a simple Card component (you can expand upon this)
-  const CourseCard = () => (
-    <div className="course-card">
-      <h1>Course - ECS 50</h1>
+  const [courses, setCourses] = useState([]);
+  const [showAddCoursePopup, setShowAddCoursePopup] = useState(false);
+  const [newCourseName, setNewCourseName] = useState('');
+  const [newCourseImage, setNewCourseImage] = useState(null);
+
+  // Handler for adding a new course
+  const handleAddCourse = () => {
+    if (newCourseName && courses.length < 6) {
+      setCourses([...courses, { name: newCourseName, image: newCourseImage }]);
+      setNewCourseName('');
+      setNewCourseImage(null);
+      setShowAddCoursePopup(false);
+    }
+  };
+
+  
+
+  // Handler for the file input change
+  const handleCourseImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setNewCourseImage(URL.createObjectURL(file));
+    }
+  };
+  const handleRemoveCourse = (index) => {
+    // Confirm before deleting the course
+    const confirmDelete = window.confirm("Are you sure you want to delete this course?");
+    if (confirmDelete) {
+      const updatedCourses = [...courses];
+      updatedCourses.splice(index, 1);
+      setCourses(updatedCourses);
+    }
+  };
+  const handleCourseClick = (course) => {
+    setSelectedCourse(course);
+    setShowCourseDetailsPopup(true);
+  };
+
+  const CourseCard = ({ course, index }) => (
+    <div
+      className="course-card"
+      style={{ backgroundImage: course.image ? `url(${course.image})` : 'none', backgroundColor: course.image ? 'transparent' : '#009fd4' }}
+      onClick={() => handleCourseClick(course)}
+      onDoubleClick={() => handleRemoveCourse(index)}
+    >
+      <h3>{course.name}</h3>
     </div>
   );
 
+
+  const AddCourseCard = () => (
+    <div className="course-card add-course" onClick={() => setShowAddCoursePopup(true)}>
+      <h3>+ Add Course</h3>
+    </div>
+  );
   const [uploadProgress, setUploadProgress] = useState(0);
 
   // Mock function to simulate file upload progress
@@ -110,19 +164,39 @@ const UserPage = () => {
                 )}
           </section>
 
-            <section className="courses-section">
-            <h2>Courses</h2>
-            <div className="course-cards-container">
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                <CourseCard />
-                {/* Add more CourseCards as needed */}
-            </div>
+          
+
+          <section className="courses-section">
+              <h2>Courses</h2>
+              <div className="course-cards-container">
+                {courses.map((course, index) => (
+                  <CourseCard key={index} course={course} index={index} />
+                ))}
+                {courses.length < 6 && (
+                  <div className="course-card add-course" onClick={() => setShowAddCoursePopup(true)}>
+                    <h3>+ Add Course</h3>
+                  </div>
+                )}
+              </div>
             </section>
+            {showAddCoursePopup && (
+              <div className="popup">
+                <div className="popup-inner">
+                  <input
+                    type="text"
+                    placeholder="Course name"
+                    value={newCourseName}
+                    onChange={(e) => setNewCourseName(e.target.value)}
+                  />
+                  <input
+                    type="file"
+                    onChange={handleCourseImageChange}
+                  />
+                  <button onClick={handleAddCourse}>Add</button>
+                  <button onClick={() => setShowAddCoursePopup(false)}>Cancel</button>
+                </div>
+              </div>
+            )}
 
             <section className="homework-section">
               <h2>Homework</h2>
@@ -152,6 +226,17 @@ const UserPage = () => {
                 </div>
               </div>
             )}
+
+              {/* Popup for Course Details */}
+          {showCourseDetailsPopup && selectedCourse && (
+            <div className="course-details-popup">
+              <div className="popup-content">
+                <button className="close-btn" onClick={() => setShowCourseDetailsPopup(false)}>×</button>
+                <h2>{selectedCourse.name}</h2>
+                {/* Additional course details here */}
+              </div>
+            </div>
+          )}
 
             
           </div>
