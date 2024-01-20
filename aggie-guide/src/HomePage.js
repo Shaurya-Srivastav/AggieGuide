@@ -2,8 +2,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './HomePage.css'; // Make sure to import the updated CSS
+import { useAuth0 } from "@auth0/auth0-react";
 
 const HomePage = () => {
+  const { loginWithRedirect } = useAuth0();
+
   return (
     <div className="homepage">
       <nav className="navbar">
@@ -12,14 +15,14 @@ const HomePage = () => {
           <a href="#home">Home</a>
           <a href="#features">Features</a>
           <a href="#contact">Contact</a>
-          <Link to="/auth" className="cta-nav">Login</Link>
+          <button className="cta-nav" onClick={() => loginWithRedirect()}>Login</button>
         </div>
       </nav>
 
       <header className="hero" id="home">
         <h1>Master Your Studies with AI</h1>
         <p>AggieGuide helps you understand faster and remember longer.</p>
-        <Link to="/auth" className="cta">Get Started</Link>
+        <button className="cta" onClick={() => loginWithRedirect()}>Get Started</button>
       </header>
 
       <section id="features" className="features">
