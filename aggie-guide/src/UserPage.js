@@ -9,7 +9,7 @@ const UserPage = () => {
 
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showCourseDetailsPopup, setShowCourseDetailsPopup] = useState(false);
-
+  const [showPracticeTest, setShowPracticeTest] = useState(false);
 
   // State to manage the active "page"
   const [activePage, setActivePage] = useState('home');
@@ -262,7 +262,20 @@ const UserPage = () => {
         )}
         {activePage === 'practice' && (
           <div>
-             <h1>Practice Test</h1>
+              <div className="course-cards-container">
+                {courses.map((course, index) => (
+                  <CourseCard key={index} course={course} index={index} />
+                ))}
+                {showCourseDetailsPopup && selectedCourse && (
+                <div className="course-details-popup">
+                  <div className="popup-content">
+                    <button className="close-btn" onClick={() => setShowPracticeTest(false)}>×</button>
+                    <h2>{selectedCourse.name}</h2>
+                    {/* Additional course details here */}
+                  </div>
+                </div>
+                )}
+              </div>
           </div>
         )}
       </main>
