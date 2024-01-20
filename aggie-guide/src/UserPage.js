@@ -135,11 +135,25 @@ const UserPage = () => {
   );
 
 
-  // Mock function to simulate file upload progress
-  const handleFileUpload = (event) => {
+  const handleFileUpload = async (event) => {
     const file = event.target.files[0];
-    if (!file) {
-      return;
+    const selectedCourseId = document.getElementById('courses').value;
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('courseId', selectedCourseId); // Append the course ID to the form data
+
+    try {
+      const response = await fetch('http://localhost:3000/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      console.log(result.message); // Or handle the response in the UI
+    } catch (error) {
+      console.error("Could not upload the file", error);
     }
 
     // This is where you would typically use a file upload service
@@ -188,6 +202,7 @@ const UserPage = () => {
         <nav className="navigation-menu">
           <ul>
             <li onClick={() => navigateTo('home')}>Home</li>
+            <li onClick={() => navigateTo('pomodoro')}>Pomodoro</li>
             <li onClick={() => navigateTo('notes')}>Notes</li>
             <li onClick={() => navigateTo('flashcards')}>Flashcards</li>
             <li onClick={() => navigateTo('practice')}>Practice Tests</li>
