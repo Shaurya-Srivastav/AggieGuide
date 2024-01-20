@@ -1,47 +1,70 @@
 import React, { useState } from 'react';
 import './UserPage.css'; 
 import PomodoroTimer from './PomodoroTimer';
-import { Link } from 'react-router-dom';
 import { useAuth0 } from "@auth0/auth0-react";
 
 const UserPage = () => {
 
-
+  const { logout } = useAuth0();
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showCourseDetailsPopup, setShowCourseDetailsPopup] = useState(false);
-
+  const [showAddCoursePopup, setShowAddCoursePopup] = useState(false);
+  const [showNotesPopup, setShowNotesPopup] = useState(false);
+  const [showFlashcardsPopup, setShowFlashcardsPopup] = useState(false);
+  const [showAddHomeworkPopup, setShowAddHomeworkPopup] = useState(false);
+  
+  const [courses, setCourses] = useState([]);
+  const [homeworks, setHomeworks] = useState([]);
+  const [newCourseName, setNewCourseName] = useState('');
+  const [newCourseImage, setNewCourseImage] = useState(null);
+  const [newHomework, setNewHomework] = useState('');
+  const [uploadProgress, setUploadProgress] = useState(0);
+  
   // State to manage the active "page"
   const [activePage, setActivePage] = useState('home');
+
+
+
+  const addCourseToDatabase = async (courseName) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/courses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: courseName }), // Only sending the course name
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json(); // Returns the added course with _id
+    } catch (error) {
+      console.error("Could not add the course to the database", error);
+    }
+  };
+  
+
+
 
   // Handler to change the active "page"
   const navigateTo = (page) => {
     setActivePage(page);
   };
 
-  const [courses, setCourses] = useState([]);
-  const [showAddCoursePopup, setShowAddCoursePopup] = useState(false);
-  const [newCourseName, setNewCourseName] = useState('');
-  const [newCourseImage, setNewCourseImage] = useState(null);
-
-  // Handler for adding a new course
-  const handleAddCourse = () => {
-    if (newCourseName && courses.length < 6) {
-      setCourses([...courses, { name: newCourseName, image: newCourseImage }]);
-      setNewCourseName('');
-      setNewCourseImage(null);
-      setShowAddCoursePopup(false);
+  const handleAddCourse = async () => {
+    if (newCourseName.trim() && courses.length < 6) {
+      const addedCourse = await addCourseToDatabase(newCourseName);
+      if (addedCourse) {
+        setCourses([...courses, addedCourse]);
+        setNewCourseName('');
+        setShowAddCoursePopup(false); // Close the popup after adding the course
+      }
+    } else {
+      alert("Course name is required and the limit of courses should be less than 6");
     }
   };
-
   
-
-  // Handler for the file input change
-  const handleCourseImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setNewCourseImage(URL.createObjectURL(file));
-    }
-  };
+  
   const handleRemoveCourse = (index) => {
     // Confirm before deleting the course
     const confirmDelete = window.confirm("Are you sure you want to delete this course?");
@@ -67,8 +90,6 @@ const UserPage = () => {
     </div>
   );
 
-    const [showNotesPopup, setShowNotesPopup] = useState(false);
-
     const handleNotesClick = (course) => {
       setShowNotesPopup(true);
     }
@@ -84,8 +105,7 @@ const UserPage = () => {
   );
 
 
-  const [showFlashcardsPopup, setShowFlashcardsPopup] = useState(false);
-
+  
   const FlashcardsCourseCard = ({ course }) => (
     <div className="notesCourseCard"
       style={{ backgroundImage: course.image ? `url(${course.image})` : 'none', backgroundColor: course.image ? 'transparent' : '#009fd4' }}
@@ -114,13 +134,6 @@ const UserPage = () => {
     </div>
   );
 
-
-  const AddCourseCard = () => (
-    <div className="course-card add-course" onClick={() => setShowAddCoursePopup(true)}>
-      <h3>+ Add Course</h3>
-    </div>
-  );
-  const [uploadProgress, setUploadProgress] = useState(0);
 
   // Mock function to simulate file upload progress
   const handleFileUpload = (event) => {
@@ -151,10 +164,6 @@ const UserPage = () => {
   };
 
 
-  const [homeworks, setHomeworks] = useState([]);
-  const [showAddHomeworkPopup, setShowAddHomeworkPopup] = useState(false);
-  const [newHomework, setNewHomework] = useState('');
-
   const handleAddHomework = () => {
     if (newHomework) {
       setHomeworks([...homeworks, newHomework]);
@@ -169,7 +178,6 @@ const UserPage = () => {
     setHomeworks(updatedHomeworks);
   };
 
-  const { logout } = useAuth0();
 
   return (
     <div className="user-page">
@@ -180,7 +188,6 @@ const UserPage = () => {
         <nav className="navigation-menu">
           <ul>
             <li onClick={() => navigateTo('home')}>Home</li>
-            <li onClick={() => navigateTo('pomodoro')}>Pomodoro</li>
             <li onClick={() => navigateTo('notes')}>Notes</li>
             <li onClick={() => navigateTo('flashcards')}>Flashcards</li>
             <li onClick={() => navigateTo('practice')}>Practice Tests</li>
@@ -230,25 +237,20 @@ const UserPage = () => {
               </div>
             </section>
             {showAddCoursePopup && (
-              <div className="popup">
-                <div className="popup-inner">
-                  <input
-                    type="text"
-                    placeholder="Course name"
-                    value={newCourseName}
-                    onChange={(e) => setNewCourseName(e.target.value)}
-                  />
-                  <input
-                    type="file"
-                    onChange={handleCourseImageChange}
-                  />
-                  <button onClick={handleAddCourse}>Add</button>
-                  <button onClick={() => setShowAddCoursePopup(false)}>Cancel</button>
+                <div className="popup">
+                  <div className="popup-inner">
+                    <input
+                      type="text"
+                      placeholder="Course name"
+                      value={newCourseName}
+                      onChange={(e) => setNewCourseName(e.target.value)}
+                    />
+                    <button onClick={handleAddCourse}>Add</button>
+                    <button onClick={() => setShowAddCoursePopup(false)}>Cancel</button>
+                  </div>
                 </div>
-              </div>
-            )}
-
-            <section className="homework-section">
+              )}
+              <section className="homework-section">
               <h2>Homework</h2>
               <button className="add-homework-btn" onClick={() => setShowAddHomeworkPopup(true)}>
                 Add Homework
