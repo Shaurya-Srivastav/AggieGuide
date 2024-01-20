@@ -227,7 +227,7 @@ const UserPage = () => {
               </div>
             )}
 
-              {/* Popup for Course Details */}
+             {/* Popup for Course Details */}
           {showCourseDetailsPopup && selectedCourse && (
             <div className="course-details-popup">
               <div className="popup-content">
