@@ -148,8 +148,9 @@ const UserPage = () => {
         {activePage === 'home' && (
           <div>
             <section className="upload-section">
-                <h2>Upload Materials</h2>
+                {courses.length <= 0 ? <h2>Upload Materials: Must have one or more course added</h2> :
                 <div className="upload-area">
+                <h2>Upload Materials: </h2> 
                 <label htmlFor="file-upload" className="custom-file-upload">
                     <i className="fa fa-cloud-upload"></i> Upload File
                 </label>
@@ -166,6 +167,7 @@ const UserPage = () => {
                 </select>
                 )}
                 </div>
+                }
                 {uploadProgress > 0 && (
                 <div className="upload-progress-bar">
                     <div className="upload-progress" style={{ width: `${uploadProgress}%` }}></div>
@@ -214,8 +216,8 @@ const UserPage = () => {
               </button>
               {homeworks.map((hw, index) => (
                 <div key={index} className="homework-item">
-                  <span>{hw}</span>
-                  <p>Due: {startDate.toLocaleString()}</p>
+                  <span>{startDate.toLocaleString()}</span>
+                  <p>{hw}</p>
                   <button className="homework-done-btn" onClick={() => removeHomework(index)}>
                     Done
                   </button>
