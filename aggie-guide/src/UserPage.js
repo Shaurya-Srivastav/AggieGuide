@@ -321,6 +321,10 @@ const UserPage = () => {
         {activePage === 'notes' && (
           <div>
             <h1>Notes</h1>
+            {courses.length == 0 ?  
+              <h2>No courses yet. Add courses from the home page.</h2> :
+              <p></p>
+            }
             <div className="course-cards-container">
               {courses.map((course, index) => (
                   <NotesCourseCard key={index} course={course} />
@@ -355,6 +359,10 @@ const UserPage = () => {
         {activePage === 'flashcards' && (
           <div>
           <h1>Flashcards</h1>
+          {courses.length == 0 ?  
+              <h2>No courses yet. Add courses from the home page.</h2> :
+              <p></p>
+            }
           <div className="course-cards-container">
             {courses.map((course, index) => (
                 <FlashcardsCourseCard key={index} course={course} />
@@ -382,7 +390,11 @@ const UserPage = () => {
         )}
         {activePage === 'practice' && (
           <div>
-              <h1>Practice Tests</h1>
+            <h1>Practice Tests</h1>
+            {courses.length == 0 ?  
+              <h2>No courses yet. Add courses from the home page.</h2> :
+              <p></p>
+            }
               <div className="course-cards-container">
                 {courses.map((course, index) => (
                   <CourseCard key={index} course={course} index={index} />
