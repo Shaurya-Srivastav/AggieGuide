@@ -67,6 +67,31 @@ const UserPage = () => {
     </div>
   );
 
+    const [showNotesPopup, setShowNotesPopup] = useState(false);
+    const [courseDateList, setCourseDateList] = useState([]);
+
+    const handleNotesClick = (course) => {
+      setShowNotesPopup(true);
+    }
+
+  const NotesCourseCard = ({ course }) => (
+    <div className="notesCourseCard"
+        style={{ backgroundImage: course.image ? `url(${course.image})` : 'none', backgroundColor: course.image ? 'transparent' : '#009fd4' }}
+        onClick={() => handleNotesClick(course)}
+      >
+      <h1>{course.name}</h1>
+
+    </div>
+  );
+
+
+  const NotesDateListItem = ({date}) => (
+    <div className="notesDateListItem">
+    <h1>{date}</h1>
+
+    </div>
+  );
+
 
   const AddCourseCard = () => (
     <div className="course-card add-course" onClick={() => setShowAddCoursePopup(true)}>
@@ -170,7 +195,7 @@ const UserPage = () => {
               <h2>Courses</h2>
               <div className="course-cards-container">
                 {courses.map((course, index) => (
-                  <CourseCard key={index} course={course} index={index} />
+                  <CourseCard key={index} course={course} />
                 ))}
                 {courses.length < 6 && (
                   <div className="course-card add-course" onClick={() => setShowAddCoursePopup(true)}>
@@ -249,11 +274,45 @@ const UserPage = () => {
         {activePage === 'notes' && (
           <div>
             <h1>Notes</h1>
+            <div className="course-cards-container">
+              {courses.map((course, index) => (
+                  <NotesCourseCard key={index} course={course} index={index} />
+              ))}
+            </div>
+            { showNotesPopup && (
+              <div className="popup">
+                <div className="notesPage">
+                  <div className='notesDateListContainer'>
+
+                    <NotesDateListItem date="01/20/2024"/>
+                    <NotesDateListItem date="01/21/2024"/>
+                    <NotesDateListItem date="01/22/2024"/>
+                    <NotesDateListItem date="01/20/2024"/>
+                    <NotesDateListItem date="01/21/2024"/>
+                    <NotesDateListItem date="01/22/2024"/>
+                    <NotesDateListItem date="01/20/2024"/>
+                    <NotesDateListItem date="01/21/2024"/>
+                    <NotesDateListItem date="01/22/2024"/>
+                    <NotesDateListItem date="01/20/2024"/>
+                    <NotesDateListItem date="01/21/2024"/>
+                    
+
+                    <button className="close-btn" onClick={() => setShowNotesPopup(false)}>×</button>
+
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
         {activePage === 'flashcards' && (
           <div>
             <h1>flashcards</h1>
+             <div className="course-cards-container">
+              {courses.map((course, index) => (
+                <NotesCourseCard key={index} course={course}/>
+              ))}
+              </div>
           </div>
         )}
         {activePage === 'practice' && (
