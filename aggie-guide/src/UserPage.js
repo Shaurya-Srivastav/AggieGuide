@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import './UserPage.css'; 
 import PomodoroTimer from './PomodoroTimer';
 import { useAuth0 } from "@auth0/auth0-react";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 const UserPage = () => {
 
   const { logout } = useAuth0();
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showCourseDetailsPopup, setShowCourseDetailsPopup] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+
   const [showAddCoursePopup, setShowAddCoursePopup] = useState(false);
   const [showNotesPopup, setShowNotesPopup] = useState(false);
   const [showFlashcardsPopup, setShowFlashcardsPopup] = useState(false);
@@ -214,8 +218,9 @@ const UserPage = () => {
         {activePage === 'home' && (
           <div>
             <section className="upload-section">
-                <h2>Upload Materials</h2>
+                {courses.length <= 0 ? <h2>Upload Materials: Must have one or more course added</h2> :
                 <div className="upload-area">
+                <h2>Upload Materials: </h2> 
                 <label htmlFor="file-upload" className="custom-file-upload">
                     <i className="fa fa-cloud-upload"></i> Upload File
                 </label>
@@ -224,11 +229,15 @@ const UserPage = () => {
                     type="file" 
                     onChange={handleFileUpload}
                 />
+                {courses.length > 0 && (
                 <select name="courses" id="courses" className="course-select">
-                    <option value="course1">Course 1</option>
-                    <option value="course2">Course 2</option>
+                      {courses.map((course, index) => (
+                        <option key={index} value={course.name}>{course.name}</option>
+                      ))}
                 </select>
+                )}
                 </div>
+                }
                 {uploadProgress > 0 && (
                 <div className="upload-progress-bar">
                     <div className="upload-progress" style={{ width: `${uploadProgress}%` }}></div>
@@ -272,7 +281,8 @@ const UserPage = () => {
               </button>
               {homeworks.map((hw, index) => (
                 <div key={index} className="homework-item">
-                  <span>{hw}</span>
+                  <span>{startDate.toLocaleString()}</span>
+                  <p>{hw}</p>
                   <button className="homework-done-btn" onClick={() => removeHomework(index)}>
                     Done
                   </button>
@@ -288,6 +298,16 @@ const UserPage = () => {
                     value={newHomework}
                     onChange={(e) => setNewHomework(e.target.value)}
                   />
+                  <span>
+                    Due Date: 
+                    <DatePicker 
+                      className="date-picker"
+                      selected={startDate} 
+                      onChange={date => setStartDate(date)} 
+                      showTimeSelect
+                      dateFormat="Pp"
+                    />  
+                  </span>
                   <button onClick={handleAddHomework}>Submit</button>
                   <button onClick={() => setShowAddHomeworkPopup(false)}>Cancel</button>
                 </div>
@@ -316,6 +336,10 @@ const UserPage = () => {
         {activePage === 'notes' && (
           <div>
             <h1>Notes</h1>
+            {courses.length == 0 ?  
+              <h2>No courses yet. Add courses from the home page.</h2> :
+              <p></p>
+            }
             <div className="course-cards-container">
               {courses.map((course, index) => (
                   <NotesCourseCard key={index} course={course} />
@@ -350,6 +374,10 @@ const UserPage = () => {
         {activePage === 'flashcards' && (
           <div>
           <h1>Flashcards</h1>
+          {courses.length == 0 ?  
+              <h2>No courses yet. Add courses from the home page.</h2> :
+              <p></p>
+            }
           <div className="course-cards-container">
             {courses.map((course, index) => (
                 <FlashcardsCourseCard key={index} course={course} />
@@ -377,6 +405,11 @@ const UserPage = () => {
         )}
         {activePage === 'practice' && (
           <div>
+            <h1>Practice Tests</h1>
+            {courses.length == 0 ?  
+              <h2>No courses yet. Add courses from the home page.</h2> :
+              <p></p>
+            }
               <div className="course-cards-container">
                 {courses.map((course, index) => (
                   <CourseCard key={index} course={course} index={index} />
