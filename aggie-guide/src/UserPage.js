@@ -73,7 +73,7 @@ const UserPage = () => {
     // Confirm before deleting the course
     const confirmDelete = window.confirm("Are you sure you want to delete this course?");
     if (confirmDelete) {
-      const updCourses = [...courses];
+      const updatedCourses = [...courses];
       updatedCourses.splice(index, 1);
       setCourses(updatedCourses);
     }
