@@ -9,7 +9,6 @@ const UserPage = () => {
 
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showCourseDetailsPopup, setShowCourseDetailsPopup] = useState(false);
-  const [showPracticeTest, setShowPracticeTest] = useState(false);
 
   // State to manage the active "page"
   const [activePage, setActivePage] = useState('home');
@@ -395,8 +394,9 @@ const UserPage = () => {
                 {showCourseDetailsPopup && selectedCourse && (
                 <div className="course-details-popup">
                   <div className="popup-content">
-                    <button className="close-btn" onClick={() => setShowPracticeTest(false)}>×</button>
+                    <button className="close-btn" onClick={() => setShowCourseDetailsPopup(false)}>×</button>
                     <h2>{selectedCourse.name}</h2>
+                    <p>Practice test questions will be below</p>
                     {/* Additional course details here */}
                   </div>
                 </div>
