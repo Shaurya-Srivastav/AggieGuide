@@ -271,6 +271,7 @@ const UserPage = () => {
                   <div className="popup-content">
                     <button className="close-btn" onClick={() => setShowPracticeTest(false)}>×</button>
                     <h2>{selectedCourse.name}</h2>
+                    <p>Practice test questions will be below</p>
                     {/* Additional course details here */}
                   </div>
                 </div>
