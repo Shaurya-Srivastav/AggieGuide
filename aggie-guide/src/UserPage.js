@@ -357,33 +357,6 @@ const UserPage = () => {
             </div>
           )}
         </div>
-          /*
-          <div>
-            <h1>Flashcards</h1>
-             <div className="course-cards-container">
-                {courses.map((course, index) => (
-                  <FlashcardsCourseCard key={index} course={course}/>
-                ))}
-              </div>
-              { showFlashcardsPopup && (
-              <div className="popup">
-                <div className="notesPage">
-                  <div className='notesDateListContainer'>
-
-                    <FlashcardsDateListItem date="01/20/2024"/>
-                    <FlashcardsDateListItem date="01/21/2024"/>
-                    <FlashcardsDateListItem date="01/22/2024"/>
-                    
-
-                    <button className="close-btn" onClick={() => setShowFlashcardsPopup(false)}>×</button>
-
-                  </div>
-                </div>
-              </div>
-              
-            )}
-          </div>
-          */
         )}
         {activePage === 'practice' && (
           <div>
