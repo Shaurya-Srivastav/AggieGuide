@@ -60,6 +60,20 @@ const PomodoroTimer = () => {
         }, 1000);
     };
 
+    const changeWorkTime = (timeAdded) => {
+        if (timeAdded + workTime > 0) {
+            setWorkTime(workTime + timeAdded);
+            setSecondsLeft(secondsLeft + timeAdded);    
+        }
+    }; 
+
+    const changeBreakTime = (timeAdded) => {
+        if (timeAdded + breakTime > 0) {
+            setBreakTime(breakTime + timeAdded);
+            setSecondsLeft(secondsLeft + timeAdded);    
+        }
+    }; 
+
     return (
         <div className="pomodoro-timer">
             <div className="time-display">{formatTime(secondsLeft)}</div>
@@ -77,13 +91,17 @@ const PomodoroTimer = () => {
             <div className="settings">
                 <div>
                     <label>Work: {formatTime(workTime)}</label>
-                    <button onClick={() => setWorkTime(workTime + 60)}>+</button>
-                    <button onClick={() => setWorkTime(workTime - 60)}>-</button>
+                    {/* <button onClick={() => setWorkTime(workTime + 60)}>+</button>
+                    <button onClick={() => setWorkTime(workTime - 60)}>-</button> */}
+                    <button onClick={() => changeWorkTime(60)}>+</button>
+                    <button onClick={() => changeWorkTime(-60)}>-</button>
                 </div>
                 <div>
                     <label>Break: {formatTime(breakTime)}</label>
-                    <button onClick={() => setBreakTime(breakTime + 60)}>+</button>
-                    <button onClick={() => setBreakTime(breakTime - 60)}>-</button>
+                    {/* <button onClick={() => setBreakTime(breakTime + 60)}>+</button>
+                    <button onClick={() => setBreakTime(breakTime - 60)}>-</button> */}
+                    <button onClick={() => changeBreakTime(60)}>+</button>
+                    <button onClick={() => changeBreakTime(-60)}>-</button>
                 </div>
             </div>
             <div className="task-input">

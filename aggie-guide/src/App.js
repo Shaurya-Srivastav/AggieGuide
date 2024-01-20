@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './HomePage';
-import AuthPage from './AuthPage'; 
+// import AuthPage from './AuthPage'; 
 import UserPage from './UserPage';
 import './App.css';
 import { Auth0Provider } from '@auth0/auth0-react';
