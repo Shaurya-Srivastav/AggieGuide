@@ -141,11 +141,24 @@ const UserPage = () => {
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
+    if (!file) {
+      alert('Please select a file to upload.');
+      return;
+    }
+  
+    // Get the selected course ID from the select element
     const selectedCourseId = document.getElementById('courses').value;
+    // Make sure selectedCourseId is not null or undefined
+    if (!selectedCourseId) {
+      console.error("No course selected");
+      alert("Please select a course.");
+      return;
+    }
+  
     const formData = new FormData();
     formData.append('file', file);
     formData.append('courseId', selectedCourseId); // Append the course ID to the form data
-
+  
     try {
       const response = await fetch('http://localhost:3000/upload', {
         method: 'POST',
@@ -155,11 +168,11 @@ const UserPage = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const result = await response.json();
-      console.log(result.message); // Or handle the response in the UI
+      alert(result.message); // Or update the state to display a message in the UI
     } catch (error) {
       console.error("Could not upload the file", error);
+      alert("Could not upload the file: " + error.message);
     }
-
     // This is where you would typically use a file upload service
     // For this example, we'll simulate progress with a timeout
     const updateProgress = (value) => {
