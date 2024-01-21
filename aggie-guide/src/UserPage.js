@@ -248,11 +248,12 @@ const UserPage = () => {
             <li onClick={() => navigateTo('home')}>Home</li>
             <li onClick={() => navigateTo('pomodoro')}>Pomodoro</li>
             <li onClick={() => navigateTo('notes')}>Notes</li>
-            <li onClick={() => navigateTo('flashcards')}>Flashcards</li>
+            <li onClick={() => window.location.href = 'https://aggie-bot.streamlit.app/'}>Chat</li>
             <li onClick={() => navigateTo('practice')}>Practice Tests</li>
-            <li className="logout" onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Logout</li>
+            <li className="logout" onClick={() => logout({ returnTo: window.location.origin })}>Logout</li>
           </ul>
         </nav>
+
       </aside>
       <main className="content">
         {activePage === 'home' && (
@@ -391,96 +392,12 @@ const UserPage = () => {
         )}
         {activePage === 'notes' && (
           <div>
-            <h1>Notes</h1>
-            {courses.length === 0 ?  
-              <h2>No courses yet. Add courses from the home page.</h2> :
-              <p></p>
-            }
-            <div className="course-cards-container">
-              {courses.map((course, index) => (
-                  <NotesCourseCard key={index} course={course} />
-              ))}
-            </div>
-            { showNotesPopup && (
-              <div className="popup">
-                <div className="notesPage">
-                  <div className='notesDateListContainer'>
-
-                    <NotesDateListItem date="01/20/2024"/>
-                    <NotesDateListItem date="01/21/2024"/>
-                    <NotesDateListItem date="01/22/2024"/>
-                    <NotesDateListItem date="01/20/2024"/>
-                    <NotesDateListItem date="01/21/2024"/>
-                    <NotesDateListItem date="01/22/2024"/>
-                    <NotesDateListItem date="01/20/2024"/>
-                    <NotesDateListItem date="01/21/2024"/>
-                    <NotesDateListItem date="01/22/2024"/>
-                    <NotesDateListItem date="01/20/2024"/>
-                    <NotesDateListItem date="01/21/2024"/>
-                    
-
-                    <button className="close-btn" onClick={() => setShowNotesPopup(false)}>×</button>
-
-                  </div>
-                </div>
-              </div>
-            )}
+           
           </div>
         )}
-        {activePage === 'flashcards' && (
+        {activePage === 'chat' && (
           <div>
-          <h1>Flashcards</h1>
-          {courses.length === 0 ?  
-              <h2>No courses yet. Add courses from the home page.</h2> :
-              <p></p>
-            }
-          <div className="course-cards-container">
-            {courses.map((course, index) => (
-                <FlashcardsCourseCard key={index} course={course} />
-            ))}
-          </div>
-          { showFlashcardsPopup && (
-            <div className="popup">
-              <div className="notesPage">
-                <div className='notesDateListContainer'>
-
-                  <FlashcardsDateListItem date="01/20/2024"/>
-                  <FlashcardsDateListItem date="01/20/2024"/>
-                  <FlashcardsDateListItem date="01/20/2024"/>
-                  <FlashcardsDateListItem date="01/20/2024"/>
-                  <FlashcardsDateListItem date="01/20/2024"/>
-                  
-
-                  <button className="close-btn" onClick={() => setShowFlashcardsPopup(false)}>×</button>
-
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        )}
-        {activePage === 'practice' && (
-          <div>
-            <h1>Practice Tests</h1>
-            {courses.length === 0 ?  
-              <h2>No courses yet. Add courses from the home page.</h2> :
-              <p></p>
-            }
-              <div className="course-cards-container">
-                {courses.map((course, index) => (
-                  <CourseCard key={index} course={course} index={index} />
-                ))}
-                {showCourseDetailsPopup && selectedCourse && (
-                <div className="course-details-popup">
-                  <div className="popup-content">
-                    <button className="close-btn" onClick={() => setShowCourseDetailsPopup(false)}>×</button>
-                    <h2>{selectedCourse.name}</h2>
-                    <p>Practice test questions will be below</p>
-                    {/* Additional course details here */}
-                  </div>
-                </div>
-                )}
-              </div>
+          <h1>Chat</h1>
           </div>
         )}
       </main>
