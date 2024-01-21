@@ -104,6 +104,9 @@ const PomodoroTimer = () => {
                     <button onClick={() => changeBreakTime(-60)}>-</button>
                 </div>
             </div>
+            <div className='todoTitle'>
+                <h1>Task List</h1>
+            </div>
             <div className="task-input">
                 <input
                     type="text"

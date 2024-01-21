@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const UserPage = () => {
 
-  
+
   useEffect(() => {
     // Fetch courses and homeworks when the component mounts
     const fetchData = async () => {
@@ -310,12 +310,12 @@ const UserPage = () => {
     <div className="user-page">
       <aside className="sidebar">
         <div className="logo-container">
-          <h1>AggieGuide</h1>
+          <img className='pomodoro' src="/pomodoro.png" height="120" width="120"/>
         </div>
         <nav className="navigation-menu">
           <ul>
             <li onClick={() => navigateTo('home')}>Home</li>
-            <li onClick={() => navigateTo('pomodoro')}>Pomodoro</li>
+            <li onClick={() => navigateTo('pomodoro')}>Pomodoro Clock</li>
             <li onClick={() => window.open('https://aggie-notes.streamlit.app/', '_blank')}>Notes</li>
             <li onClick={() => window.open('https://aggie-bot.streamlit.app/', '_blank')}>Chat</li>
             <li onClick={() => window.open('https://aggieapperptest-kd8awxb7p3kjupikylponf.streamlit.app/', '_blank')}>Practice Tests</li>
@@ -374,7 +374,7 @@ const UserPage = () => {
                   </div>
                 )}
               <section className="homework-section">
-              <h2>Homework</h2>
+              <h2 className='homework-header'>Homework</h2>
               <button className="add-homework-btn" onClick={() => setShowAddHomeworkPopup(true)}>
                 Add Homework
               </button>

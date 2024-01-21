@@ -7,6 +7,11 @@
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
+.todoTitle {
+    font-size: 2rem;
+    color: #0056b3;
+}
+
 .time-display {
     font-size: 6rem;
     color: #0056b3;
