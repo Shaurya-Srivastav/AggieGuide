@@ -10,7 +10,9 @@ const UserPage = () => {
   const { logout } = useAuth0();
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showCourseDetailsPopup, setShowCourseDetailsPopup] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
+  // const [startDate, setStartDate] = useState(new Date());
+  const [startDates, setStartDates] = useState([]);
+  const [newDate, setNewDate] = useState(new Date());
 
   const [showAddCoursePopup, setShowAddCoursePopup] = useState(false);
   const [showNotesPopup, setShowNotesPopup] = useState(false);
@@ -28,7 +30,32 @@ const UserPage = () => {
 
   const [courseFiles, setCourseFiles] = useState([]);
 
+  const handleHomeworkUpload = async (nm, dt) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/homework', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: nm, date: dt }), // Only sending the course name
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json(); // Returns the added course with _id
+    } catch (error) {
+      console.error("Could not add the course to the database", error);
+    }
+  };
 
+  const updateHomeworkList = async () => {
+    setHomeworks([]);
+    const response = await fetch('http://localhost:3000/api/homework');
+    const data = await response.json();
+    console.log(data);
+
+    setHomeworks([...homeworks, ...data]);
+  };
 
   const addCourseToDatabase = async (courseName) => {
     try {
@@ -218,6 +245,8 @@ const UserPage = () => {
       setNewHomework('');
       setShowAddHomeworkPopup(false);
     }
+    setStartDates([...startDates, newDate]);
+    handleHomeworkUpload(newHomework, newDate.toLocaleString());
   };
 
   const removeHomework = (index) => {
@@ -235,6 +264,7 @@ const UserPage = () => {
 
   document.addEventListener('DOMContentLoaded', async () => {
     await updateCourseList();
+    await updateHomeworkList();
   });
 
   return (
@@ -338,7 +368,7 @@ const UserPage = () => {
               </button>
               {homeworks.map((hw, index) => (
                 <div key={index} className="homework-item">
-                  <span>{startDate.toLocaleString()}</span>
+                  <span>{startDates[index].toLocaleString()}</span>
                   <p>{hw}</p>
                   <button className="homework-done-btn" onClick={() => removeHomework(index)}>
                     Done
@@ -359,8 +389,8 @@ const UserPage = () => {
                     Due Date: 
                     <DatePicker 
                       className="date-picker"
-                      selected={startDate} 
-                      onChange={date => setStartDate(date)} 
+                      selected={newDate} 
+                      onChange={date => setNewDate(date)} 
                       showTimeSelect
                       dateFormat="Pp"
                     />  

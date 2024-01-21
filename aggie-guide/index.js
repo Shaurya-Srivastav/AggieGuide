@@ -104,6 +104,41 @@ async function run() {
             await client.close();
           }
         });
+
+        app.get('/api/homework', async (req, res) => {
+          try {
+            await client.connect();
+            const collection = client.db('aggie-guide').collection('homework');
+            const homework = await collection.find({}).toArray();
+            res.json(homework);
+          } catch (error) {
+            res.status(500).json({ error: error.toString() });
+          }
+        });
+        
+        app.post('/api/homework', async (req, res) => {
+          try {
+            await client.connect();
+            const collection = client.db('aggie-guide').collection('homework');
+            const homework = req.body; // The course data sent in the request body
+            const result = await collection.insertOne(homework);
+            
+            // If you want to return the entire new course document, use the 'insertedId' to fetch it.
+            // The inserted document is not returned directly in the result of `insertOne()`.
+            if (result.insertedId) {
+              const newHW = await collection.findOne({ _id: result.insertedId });
+              res.status(201).json(newHW);
+            } else {
+              throw new Error('Failed to insert new course.');
+            }
+        
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: error.message });
+          } finally {
+            await client.close();
+          }
+        });
     
   } catch (err) {
     console.error("Connection to MongoDB failed", err);
