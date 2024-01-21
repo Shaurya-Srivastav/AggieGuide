@@ -321,7 +321,7 @@ const UserPage = () => {
           <ul>
             <li onClick={() => navigateTo('home')}>Home</li>
             <li onClick={() => navigateTo('pomodoro')}>Pomodoro</li>
-            <li onClick={() => navigateTo('notes')}>Notes</li>
+            <li onClick={() => window.open('https://aggie-notes.streamlit.app/', '_blank')}>Notes</li>
             <li onClick={() => window.open('https://aggie-bot.streamlit.app/', '_blank')}>Chat</li>
             <li onClick={() => navigateTo('practice')}>Practice Tests</li>
             <li className="logout" onClick={() => logout({ returnTo: window.location.origin })}>Logout</li>
