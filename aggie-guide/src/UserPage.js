@@ -30,7 +30,6 @@ const UserPage = () => {
 
 
 
-
   const addCourseToDatabase = async (courseName) => {
     try {
       const response = await fetch('http://localhost:3000/api/courses', {
@@ -227,6 +226,16 @@ const UserPage = () => {
     setHomeworks(updatedHomeworks);
   };
 
+  const updateCourseList = async () => {
+      setCourses([])
+      const response = await fetch('http://localhost:3000/api/courses')
+      const data = await response.json()
+      setCourses([...courses, ...data]);
+  };
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await updateCourseList();
+  });
 
   return (
     <div className="user-page">
@@ -383,7 +392,7 @@ const UserPage = () => {
         {activePage === 'notes' && (
           <div>
             <h1>Notes</h1>
-            {courses.length == 0 ?  
+            {courses.length === 0 ?  
               <h2>No courses yet. Add courses from the home page.</h2> :
               <p></p>
             }
@@ -421,7 +430,7 @@ const UserPage = () => {
         {activePage === 'flashcards' && (
           <div>
           <h1>Flashcards</h1>
-          {courses.length == 0 ?  
+          {courses.length === 0 ?  
               <h2>No courses yet. Add courses from the home page.</h2> :
               <p></p>
             }
@@ -453,7 +462,7 @@ const UserPage = () => {
         {activePage === 'practice' && (
           <div>
             <h1>Practice Tests</h1>
-            {courses.length == 0 ?  
+            {courses.length === 0 ?  
               <h2>No courses yet. Add courses from the home page.</h2> :
               <p></p>
             }
