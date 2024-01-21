@@ -323,7 +323,7 @@ const UserPage = () => {
             <li onClick={() => navigateTo('pomodoro')}>Pomodoro</li>
             <li onClick={() => window.open('https://aggie-notes.streamlit.app/', '_blank')}>Notes</li>
             <li onClick={() => window.open('https://aggie-bot.streamlit.app/', '_blank')}>Chat</li>
-            <li onClick={() => navigateTo('practice')}>Practice Tests</li>
+            <li onClick={() => window.open('https://aggieapperptest-kd8awxb7p3kjupikylponf.streamlit.app/', '_blank')}>Practice Tests</li>
             <li className="logout" onClick={() => logout({ returnTo: window.location.origin })}>Logout</li>
           </ul>
         </nav>
