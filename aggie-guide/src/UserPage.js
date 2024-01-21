@@ -20,12 +20,14 @@ const UserPage = () => {
   const [courses, setCourses] = useState([]);
   const [homeworks, setHomeworks] = useState([]);
   const [newCourseName, setNewCourseName] = useState('');
-  const [newCourseImage, setNewCourseImage] = useState(null);
   const [newHomework, setNewHomework] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
   
   // State to manage the active "page"
   const [activePage, setActivePage] = useState('home');
+
+  const [courseFiles, setCourseFiles] = useState([]);
+
 
 
 
@@ -78,9 +80,25 @@ const UserPage = () => {
       setCourses(updatedCourses);
     }
   };
-  const handleCourseClick = (course) => {
+  // Replace your existing handleCourseClick with this
+  const handleCourseClick = async (course) => {
     setSelectedCourse(course);
     setShowCourseDetailsPopup(true);
+    
+    // Fetch files for the selected course
+    try {
+      // Adjust the endpoint if needed, and ensure your server can handle the query parameter
+      const response = await fetch(`http://localhost:3000/api/files?courseId=${encodeURIComponent(course._id)}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const files = await response.json();
+      setCourseFiles(files); // Update the state with the fetched files
+    } catch (error) {
+      console.error("Could not fetch the files for the course", error);
+      // Handle errors here, e.g., setCourseFiles([]) or show an error message
+      setCourseFiles([]); // Reset or handle as needed
+    }
   };
 
   const CourseCard = ({ course, index }) => (
@@ -138,7 +156,6 @@ const UserPage = () => {
     </div>
   );
 
-
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) {
@@ -148,7 +165,6 @@ const UserPage = () => {
   
     // Get the selected course ID from the select element
     const selectedCourseId = document.getElementById('courses').value;
-    // Make sure selectedCourseId is not null or undefined
     if (!selectedCourseId) {
       console.error("No course selected");
       alert("Please select a course.");
@@ -168,11 +184,13 @@ const UserPage = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const result = await response.json();
-      alert(result.message); // Or update the state to display a message in the UI
+      alert(result.message);
+      // Do NOT open any popups here
     } catch (error) {
       console.error("Could not upload the file", error);
       alert("Could not upload the file: " + error.message);
     }
+    
     // This is where you would typically use a file upload service
     // For this example, we'll simulate progress with a timeout
     const updateProgress = (value) => {
@@ -287,6 +305,22 @@ const UserPage = () => {
                   </div>
                 </div>
               )}
+               {showCourseDetailsPopup && selectedCourse && (
+                  <div className="course-details-popup">
+                    <div className="popup-content">
+                      <button className="close-btn" onClick={() => setShowCourseDetailsPopup(false)}>×</button>
+                      <h2>{selectedCourse.name}</h2>
+                      <div className="file-cards-container">
+                        {courseFiles.map((file, index) => (
+                          <div key={index} className="file-card">
+                            <p>{file.originalName}</p>
+                            {/* Add additional file details and actions here */}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               <section className="homework-section">
               <h2>Homework</h2>
               <button className="add-homework-btn" onClick={() => setShowAddHomeworkPopup(true)}>

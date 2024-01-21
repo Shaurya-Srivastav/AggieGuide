@@ -29,27 +29,28 @@ async function run() {
     });
     
       
-    app.post('/upload', upload.single('file'), async (req, res) => {
-      if (!req.file) {
+      app.post('/upload', upload.single('file'), async (req, res) => {
+        if (!req.file) {
           return res.status(400).send({ message: 'No file uploaded.' });
-      }
-
-      const collection = client.db('aggie-guide').collection('files');
-      try {
+        }
+      
+        const collection = client.db('aggie-guide').collection('files');
+        
+        try {
           const result = await collection.insertOne({
-              originalName: req.file.originalname,
-              mimeType: req.file.mimetype,
-              size: req.file.size,
-              path: req.file.path,
-              courseId: req.body.courseId
+            originalName: req.file.originalname,
+            mimeType: req.file.mimetype,
+            size: req.file.size,
+            path: req.file.path,
+            courseId: req.body.courseId // This assumes you're sending a courseId with the form data
           });
-
+      
           res.status(201).send({ message: 'File uploaded successfully', fileId: result.insertedId });
-      } catch (error) {
+        } catch (error) {
           console.error('Error when uploading file', error);
           res.status(500).json({ error: error.message });
-      }
-  });
+        }
+      });
       
       
         // API endpoint to get all courses
@@ -61,7 +62,9 @@ async function run() {
             res.json(courses);
           } catch (error) {
             res.status(500).json({ error: error.toString() });
-          } 
+          } finally {
+            await client.close();
+          }
         });
       
       // API endpoint to get all courses
@@ -73,7 +76,9 @@ async function run() {
           res.json(courses);
         } catch (error) {
           res.status(500).json({ error: error.toString() });
-        } 
+        } finally {
+          await client.close();
+        }
       });
       
       app.post('/api/courses', async (req, res) => {
@@ -95,7 +100,9 @@ async function run() {
           } catch (error) {
             console.error(error);
             res.status(500).json({ error: error.message });
-          } 
+          } finally {
+            await client.close();
+          }
         });
     
   } catch (err) {
