@@ -36,8 +36,14 @@ const PomodoroTimer = () => {
 
     const handleReset = () => {
         setIsActive(false);
-        setIsWorkSession(true);
-        setSecondsLeft(workTime);
+        // setIsWorkSession(true);
+        // setSecondsLeft(workTime);
+        if (isWorkSession) { 
+            setSecondsLeft(workTime); 
+        }
+        else if (!isWorkSession) { 
+            setSecondsLeft(breakTime); 
+        }
     };
 
     const formatTime = (time) => {
@@ -91,17 +97,33 @@ const PomodoroTimer = () => {
             <div className="settings">
                 <div>
                     <label>Work: {formatTime(workTime)}</label>
-                    {/* <button onClick={() => setWorkTime(workTime + 60)}>+</button>
-                    <button onClick={() => setWorkTime(workTime - 60)}>-</button> */}
-                    <button onClick={() => changeWorkTime(60)}>+</button>
-                    <button onClick={() => changeWorkTime(-60)}>-</button>
+                    {/* <button onClick={() => changeWorkTime(60)}>+</button>
+                    <button onClick={() => changeWorkTime(-60)}>-</button> */}
+                    {isWorkSession ?
+                    <div>
+                        <button onClick={() => changeWorkTime(60)}>+</button>
+                        <button onClick={() => changeWorkTime(-60)}>-</button>
+                    </div> :
+                    <div>
+                        <button disabled='true' onClick={() => changeWorkTime(60)}>+</button>
+                        <button disabled='true' onClick={() => changeWorkTime(-60)}>-</button>
+                    </div>
+                    }
                 </div>
                 <div>
                     <label>Break: {formatTime(breakTime)}</label>
-                    {/* <button onClick={() => setBreakTime(breakTime + 60)}>+</button>
-                    <button onClick={() => setBreakTime(breakTime - 60)}>-</button> */}
-                    <button onClick={() => changeBreakTime(60)}>+</button>
-                    <button onClick={() => changeBreakTime(-60)}>-</button>
+                    {/* <button onClick={() => changeBreakTime(60)}>+</button>
+                    <button onClick={() => changeBreakTime(-60)}>-</button> */}
+                    {isWorkSession ?
+                    <div>
+                        <button disabled='true' onClick={() => changeBreakTime(60)}>+</button>
+                        <button disabled='true' onClick={() => changeBreakTime(-60)}>-</button>
+                    </div> :
+                    <div>
+                        <button onClick={() => changeBreakTime(60)}>+</button>
+                        <button onClick={() => changeBreakTime(-60)}>-</button>
+                    </div>
+                    }
                 </div>
             </div>
             <div className='todoTitle'>

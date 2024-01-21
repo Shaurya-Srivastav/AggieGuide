@@ -130,16 +130,33 @@ const UserPage = () => {
     }
   };
   
-  
-  const handleRemoveCourse = (index) => {
-    // Confirm before deleting the course
-    const confirmDelete = window.confirm("Are you sure you want to delete this course?");
-    if (confirmDelete) {
+  const removeCourse = async (courseId, index) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/courses/${courseId}`, {
+        method: 'DELETE',
+      });
       const updatedCourses = [...courses];
       updatedCourses.splice(index, 1);
-      setCourses(updatedCourses);
+      setCourses(updatedCourses);  
+    } catch (error) {
+      console.log("Could not delete the specified homework", error);
     }
   };
+
+  const handleRemoveCourse = async (courseId, index) => {
+    removeCourse(courseId, index);
+    window.location.reload();
+  };
+
+  // const handleRemoveCourse = (index) => {
+  //   // Confirm before deleting the course
+  //   const confirmDelete = window.confirm("Are you sure you want to delete this course?");
+  //   if (confirmDelete) {
+  //     const updatedCourses = [...courses];
+  //     updatedCourses.splice(index, 1);
+  //     setCourses(updatedCourses);
+  //   }
+  // };
   // Replace your existing handleCourseClick with this
   const handleCourseClick = async (course) => {
     setSelectedCourse(course);
@@ -165,8 +182,8 @@ const UserPage = () => {
     <div
       className="course-card"
       style={{ backgroundImage: course.image ? `url(${course.image})` : 'none', backgroundColor: course.image ? 'transparent' : '#009fd4' }}
-      onClick={() => handleCourseClick(course)}
-      onDoubleClick={() => handleRemoveCourse(index)}
+      onContextMenu={() => handleCourseClick(course)}
+      onDoubleClick={() => handleRemoveCourse(course._id, index)}
     >
       <h3>{course.name}</h3>
     </div>

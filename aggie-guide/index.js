@@ -109,7 +109,20 @@ async function run() {
           } catch(error) {
             res.status(500).json({ error: error.toString() });
           }
-        });  
+        });
+
+        app.delete('/api/courses/:id', async (req, res) => {
+          try {
+            await client.connect();
+            const collection = client.db('aggie-guide').collection('courses');
+            const id = req.params.id;
+            const objectId = new ObjectId(id);
+            const result = await collection.deleteOne({ _id: objectId });
+
+          } catch(error) {
+            res.status(500).json({ error: error.toString() });
+          }
+        });
 
         app.get('/api/homework', async (req, res) => {
           try {
@@ -144,21 +157,21 @@ async function run() {
           }
         });
 
-        app.delete('/api/homework/:id', async (req, res) => {
-            try {
-              await client.connect();
-              const collection = client.db('aggie-guide').collection('homework');
-              const result = await collection.deleteOne({ _id: req.params.id });
+        // app.delete('/api/homework/:id', async (req, res) => {
+        //     try {
+        //       await client.connect();
+        //       const collection = client.db('aggie-guide').collection('homework');
+        //       const result = await collection.deleteOne({ _id: req.params.id });
 
-              if (result.deletedCount === 1) {
-                res.status(200).json({ message: 'Homework successfully deleted' });
-              } else {
-                res.status(404).json({ message: 'Homework not found' });
-              }
-            } catch (error) {
-              res.status(500).json({ error: error.message });
-            }
-          });
+        //       if (result.deletedCount === 1) {
+        //         res.status(200).json({ message: 'Homework successfully deleted' });
+        //       } else {
+        //         res.status(404).json({ message: 'Homework not found' });
+        //       }
+        //     } catch (error) {
+        //       res.status(500).json({ error: error.message });
+        //     }
+        //   });
     
   } catch (err) {
     console.error("Connection to MongoDB failed", err);
