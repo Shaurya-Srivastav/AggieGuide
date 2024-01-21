@@ -94,8 +94,23 @@ const UserPage = () => {
     }
   };
   
+  const deleteHomework = async (homeworkId, index) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/homework/${homeworkId}`, {
+        method: 'DELETE',
+      });
+      const updatedHomeworks = [...homeworks];
+      updatedHomeworks.splice(index, 1);
+      setHomeworks(updatedHomeworks);  
+    } catch (error) {
+      console.log("Could not delete the specified homework", error);
+    }
+  };
 
-
+  const removeHomework = async (homeworkId, index) => {
+    deleteHomework(homeworkId, index);
+    window.location.reload();
+  };
 
   // Handler to change the active "page"
   const navigateTo = (page) => {
@@ -266,28 +281,8 @@ const UserPage = () => {
     }
     setStartDates([...startDates, newDate]);
     handleHomeworkUpload(newHomework, newDate.toLocaleString());
+    window.location.reload();
   };
-
-  const removeHomework = async (index, homeworkId) => {
-    // Send a DELETE request to the server to remove the homework
-    try {
-      const response = await fetch(`http://localhost:3000/api/homework/${homeworkId}`, {
-        method: 'DELETE',
-      });
-  
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-  
-      // Remove the homework from the local state
-      const updatedHomeworks = [...homeworks];
-      updatedHomeworks.splice(index, 1);
-      setHomeworks(updatedHomeworks);
-    } catch (error) {
-      console.error("Could not delete the homework", error);
-    }
-  };
-  
 
   const updateCourseList = async () => {
     try {
@@ -389,7 +384,7 @@ const UserPage = () => {
                       {hw.date ? new Date(hw.date).toLocaleString() : 'No Date'}
                     </span>
                     <p>{hw.name}</p>
-                    <button className="homework-done-btn" onClick={() => removeHomework(index, hw._id)}>
+                    <button className="homework-done-btn" onClick={() => removeHomework(hw._id, index)}>
                       Done
                     </button>
                   </div>

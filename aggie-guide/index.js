@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
@@ -28,7 +28,6 @@ async function run() {
       console.log(`Server running on port ${PORT}`);
     });
     
-      
       app.post('/upload', upload.single('file'), async (req, res) => {
         if (!req.file) {
           return res.status(400).send({ message: 'No file uploaded.' });
@@ -98,6 +97,19 @@ async function run() {
             res.status(500).json({ error: error.message });
           }
         });
+
+        app.delete('/api/homework/:id', async (req, res) => {
+          try {
+            await client.connect();
+            const collection = client.db('aggie-guide').collection('homework');
+            const id = req.params.id;
+            const objectId = new ObjectId(id);
+            const result = await collection.deleteOne({ _id: objectId });
+
+          } catch(error) {
+            res.status(500).json({ error: error.toString() });
+          }
+        });  
 
         app.get('/api/homework', async (req, res) => {
           try {
