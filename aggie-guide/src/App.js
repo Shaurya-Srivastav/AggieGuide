@@ -11,7 +11,7 @@ function App() {
     <Auth0Provider
     domain="dev-tnijgq1ck832j8gi.us.auth0.com"
     clientId="i7ch9CiT8uOS6Xy81vBZD3bMlUpllUp3"
-    redirectUri="http://localhost:3000/user"
+    redirectUri="http://localhost:3001/user"
     >
       <Router>
         <Routes>
