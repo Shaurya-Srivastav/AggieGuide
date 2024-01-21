@@ -62,9 +62,7 @@ async function run() {
             res.json(courses);
           } catch (error) {
             res.status(500).json({ error: error.toString() });
-          } finally {
-            await client.close();
-          }
+          } 
         });
       
       // API endpoint to get all courses
@@ -76,9 +74,7 @@ async function run() {
           res.json(courses);
         } catch (error) {
           res.status(500).json({ error: error.toString() });
-        } finally {
-          await client.close();
-        }
+        } 
       });
       
       app.post('/api/courses', async (req, res) => {
@@ -100,8 +96,6 @@ async function run() {
           } catch (error) {
             console.error(error);
             res.status(500).json({ error: error.message });
-          } finally {
-            await client.close();
           }
         });
 
@@ -135,10 +129,24 @@ async function run() {
           } catch (error) {
             console.error(error);
             res.status(500).json({ error: error.message });
-          } finally {
-            await client.close();
           }
         });
+
+        app.delete('/api/homework/:id', async (req, res) => {
+            try {
+              await client.connect();
+              const collection = client.db('aggie-guide').collection('homework');
+              const result = await collection.deleteOne({ _id: req.params.id });
+
+              if (result.deletedCount === 1) {
+                res.status(200).json({ message: 'Homework successfully deleted' });
+              } else {
+                res.status(404).json({ message: 'Homework not found' });
+              }
+            } catch (error) {
+              res.status(500).json({ error: error.message });
+            }
+          });
     
   } catch (err) {
     console.error("Connection to MongoDB failed", err);

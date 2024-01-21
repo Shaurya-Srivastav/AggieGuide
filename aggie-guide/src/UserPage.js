@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import './UserPage.css'; 
 import PomodoroTimer from './PomodoroTimer';
 import { useAuth0 } from "@auth0/auth0-react";
@@ -6,6 +6,17 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 const UserPage = () => {
+
+  
+  useEffect(() => {
+    // Fetch courses and homeworks when the component mounts
+    const fetchData = async () => {
+      await updateCourseList();
+      await updateHomeworkList();
+    };
+
+    fetchData();
+  }, []);
 
   const { logout } = useAuth0();
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -48,13 +59,21 @@ const UserPage = () => {
     }
   };
 
+  
   const updateHomeworkList = async () => {
-    setHomeworks([]);
-    const response = await fetch('http://localhost:3000/api/homework');
-    const data = await response.json();
-    console.log(data);
-
-    setHomeworks([...homeworks, ...data]);
+    try {
+      const response = await fetch('http://localhost:3000/api/homework');
+      const data = await response.json();
+  
+      // Check if data is an array before setting state
+      if (Array.isArray(data)) {
+        setHomeworks(data);
+      } else {
+        console.error('Expected an array, but received:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching homework:', error);
+    }
   };
 
   const addCourseToDatabase = async (courseName) => {
@@ -249,18 +268,43 @@ const UserPage = () => {
     handleHomeworkUpload(newHomework, newDate.toLocaleString());
   };
 
-  const removeHomework = (index) => {
-    const updatedHomeworks = [...homeworks];
-    updatedHomeworks.splice(index, 1);
-    setHomeworks(updatedHomeworks);
+  const removeHomework = async (index, homeworkId) => {
+    // Send a DELETE request to the server to remove the homework
+    try {
+      const response = await fetch(`http://localhost:3000/api/homework/${homeworkId}`, {
+        method: 'DELETE',
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+  
+      // Remove the homework from the local state
+      const updatedHomeworks = [...homeworks];
+      updatedHomeworks.splice(index, 1);
+      setHomeworks(updatedHomeworks);
+    } catch (error) {
+      console.error("Could not delete the homework", error);
+    }
   };
+  
 
   const updateCourseList = async () => {
-      setCourses([])
-      const response = await fetch('http://localhost:3000/api/courses')
-      const data = await response.json()
-      setCourses([...courses, ...data]);
+    try {
+      const response = await fetch('http://localhost:3000/api/courses');
+      const data = await response.json();
+      
+      // Check if data is an array before setting state
+      if (Array.isArray(data)) {
+        setCourses(data);
+      } else {
+        console.error('Expected an array, but received:', data);
+      }
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
   };
+  
 
   document.addEventListener('DOMContentLoaded', async () => {
     await updateCourseList();
@@ -288,33 +332,6 @@ const UserPage = () => {
       <main className="content">
         {activePage === 'home' && (
           <div>
-            <section className="upload-section">
-                {courses.length <= 0 ? <h2>Upload Materials: Must have one or more course added</h2> :
-                <div className="upload-area">
-                <h2>Upload Materials: </h2> 
-                <label htmlFor="file-upload" className="custom-file-upload">
-                    <i className="fa fa-cloud-upload"></i> Upload File
-                </label>
-                <input 
-                    id="file-upload" 
-                    type="file" 
-                    onChange={handleFileUpload}
-                />
-                {courses.length > 0 && (
-                <select name="courses" id="courses" className="course-select">
-                      {courses.map((course, index) => (
-                        <option key={index} value={course.name}>{course.name}</option>
-                      ))}
-                </select>
-                )}
-                </div>
-                }
-                {uploadProgress > 0 && (
-                <div className="upload-progress-bar">
-                    <div className="upload-progress" style={{ width: `${uploadProgress}%` }}></div>
-                </div>
-                )}
-          </section>
 
           
 
@@ -367,14 +384,17 @@ const UserPage = () => {
                 Add Homework
               </button>
               {homeworks.map((hw, index) => (
-                <div key={index} className="homework-item">
-                  <span>{startDates[index].toLocaleString()}</span>
-                  <p>{hw}</p>
-                  <button className="homework-done-btn" onClick={() => removeHomework(index)}>
-                    Done
-                  </button>
-                </div>
-              ))}
+                  <div key={hw._id} className="homework-item">
+                    <span>
+                      {hw.date ? new Date(hw.date).toLocaleString() : 'No Date'}
+                    </span>
+                    <p>{hw.name}</p>
+                    <button className="homework-done-btn" onClick={() => removeHomework(index, hw._id)}>
+                      Done
+                    </button>
+                  </div>
+                ))}
+
             </section>
             {showAddHomeworkPopup && (
               <div className="popup">
