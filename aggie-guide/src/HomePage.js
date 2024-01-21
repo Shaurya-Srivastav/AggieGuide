@@ -10,7 +10,7 @@ const HomePage = () => {
   return (
     <div className="homepage">
       <nav className="navbar">
-        <div className="logo">AggieGuide</div>
+        <div className="logo">Pomodoro</div>
         <div className="nav-links">
           <a href="#home">Home</a>
           <a href="#features">Features</a>
@@ -21,7 +21,7 @@ const HomePage = () => {
 
       <header className="hero" id="home">
         <h1>Master Your Studies with AI</h1>
-        <p>AggieGuide helps you understand faster and remember longer.</p>
+        <p>Pomodoro helps you understand faster and remember longer.</p>
         <button className="cta" onClick={() => loginWithRedirect()}>Get Started</button>
       </header>
 
@@ -48,7 +48,7 @@ const HomePage = () => {
         <h2>Contact Us</h2>
         <p>If you have any questions, feel free to reach out to us.</p>
         <div className="contact-info">
-          <p><strong>Email:</strong> support@aggieguide.com</p>
+          <p><strong>Email:</strong> support@Pomodoro.com</p>
           <p><strong>Phone:</strong> (925) 356-1890</p>
           <p><strong>Address:</strong> 1 Shields Ave, Davis, CA 95616</p>
         </div>
@@ -56,7 +56,7 @@ const HomePage = () => {
 
 
       <footer className="footer" id="contact">
-        <p>© 2024 AggieGuide. All rights reserved.</p>
+        <p>© 2024 Pomodoro. All rights reserved.</p>
       </footer>
     </div>
   );
